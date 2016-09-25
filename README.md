@@ -33,6 +33,7 @@ Code is heavily commented so please refer to it for further explanations about h
 - UI for entering fuel and materials position at launch rather than hard coding these
 - Full Bug testing
 - Code optimization
+- Rednet logging
 - add support to put some blocks from front (torches, ladders...)
 - Add some build functions : 2D shapes (circle, triangles), 3D shapes (sphere, pyramid)
 - Add a matrix build based on file reading
