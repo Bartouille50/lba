@@ -1,5 +1,4 @@
-# lba
-Lonesome BuilderCraft API (LBA) for ComputerCraft Turtles
+# Lonesome BuilderCraft API (LBA) for ComputerCraft Turtles
 @Author			Bart'Ouille
 @licence 		GNU-GPL 3.0
 				I'll appreciate if you keep credit me if you use or fork this api
