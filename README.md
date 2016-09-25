@@ -1,4 +1,4 @@
-# Lonesome BuilderCraft API (LBA) forMinecraft ComputerCraft Turtles
+# Lonesome BuilderCraft API (LBA) for Minecraft ComputerCraft Turtles
 
 ## Disclaimer
 ** This API is not linked to ComputerCraft mod for Minecraft (http://computercraft.info). Do not report here questions and bugs about ComputerCraft and do not report there questions and bugs about lba
