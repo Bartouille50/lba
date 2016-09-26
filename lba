@@ -11,7 +11,7 @@ LONESOME BUILDERCRAFT API (LBA) for Computer Craft Turtles
 @Channel		https://www.youtube.com/channel/UCUavPLdEJR3CL5mIUrSmpXw
 ---------------------------------------------------------------------------]]
 
--- Construction function
+-- Construction functions
 -- function dot(x, y, z, m)
 -- function line(x1, y1, z1, x2, y2, z2, m)
 -- function rectangleY (x1, z1, x2, z2, y, m, filled, thickness)
@@ -22,30 +22,34 @@ LONESOME BUILDERCRAFT API (LBA) for Computer Craft Turtles
 -----------------------------------------------------------------------------
 function lba_yourBuild()
 	-- Xmob Tower Script with 5 spawning floors
-	local yStart = 0
+	local xStart = 2
+	local yStart = -4	
+	local zStart = 0
+	
+	
+	-- Pilar for climbing
+	dot(xStart,yStart,zStart-1, "stone@0")
 	-- Initial area for building
-	rectangleY (1,1,27,27,yStart-1,"cobblestone@0", true)
-	-- Pilar for climbing
-	dot(0,yStart,1, "cobblestone@0")
+	rectangleY (xStart,zStart,xStart+26,zStart+26,yStart,"stone@0", true)
 	-- Crashing floor
-	rectangleY (1,1,27,27,yStart,"stone_slab@3", true)
+	rectangleY (xStart,zStart,xStart+26,zStart+26,yStart+1,"stone_slab@0", true)
 	-- Pilar for climbing
-	for i=1,25 do dot(0,yStart+i,1, "cobblestone@0") end
+	for i=1,26 do dot(xStart,yStart+i,zStart-1, "stone@0") end
 	-- Pilar + walls for masking light on spawn floors
-	for i=26,40 do
-		dot(0,yStart+i,1, "cobblestone@0")
-		rectangleY(3,3,25,25,yStart+i,"cobblestone@0",false,1)
+	for i=27,41 do
+		dot(xStart,yStart+i,zStart-1, "stone@0")
+		rectangleY(xStart+2,zStart+2,xStart+24,zStart+24,yStart+i,"stone@0",false,1)
 	end
 	-- Spawning plaforms, surrounded by walls and a 2 blocks path for player moving
 	for i=0,4 do
-		dot(0,yStart+41+3*i,1, "cobblestone@0")
-		rectangleY(1,1,27,27,yStart+41+3*i,"stone_slab@3", false, 2)
-		rectangleY(3,3,25,25,yStart+41+3*i,"cobblestone@0", false, 1)
-		xmobFloor(4,4,24,24,yStart+41+3*i,"cobblestone@0", false, 1)
-		dot(0,yStart+42+3*i,1, "cobblestone@0")
-		rectangleY(3,3,25,25,yStart+42+3*i,"cobblestone@0", false, 1)
-		dot(0,yStart+43+3*i,1, "cobblestone@0")
-		rectangleY(3,3,25,25,yStart+43+3*i,"cobblestone@0", false, 1)
+		dot(xStart,yStart+42+3*i,zStart-1, "stone@0")
+		rectangleY(xStart,zStart,xStart+26,zStart+26,yStart+42+3*i,"stone_slab@0", false, 2)
+		rectangleY(xStart+2,zStart+2,xStart+24,zStart+24,yStart+42+3*i,"stone@0", false, 1)
+		xmobFloor(xStart+3,zStart+3,xStart+23,Zstart+23,yStart+42+3*i,"stone@0", false, 1)
+		dot(xStart,yStart+43+3*i,zStart-1, "stone@0")
+		rectangleY(xStart+2,zStart+2,xStart+24,zStart+24,yStart+43+3*i,"stone@0", false, 1)
+		dot(xStart,yStart+44+3*i,zStart-1, "stone@0")
+		rectangleY(xStart+2,zStart+2,xStart+24,zStart+24,yStart+44+3*i,"stone@0", false, 1)
 	end
 	-- No roof for prevent spawning while finishing tower equipment
 end
@@ -78,7 +82,7 @@ autoRefuelEnabled = true
 
 -- Turtle position to go when refueling
 -- DO NOT PUT FUEL POSITION BUT TURTLE POSITION (just above for instance)
-fuelPosition = vector.new(-5,1,-1)
+fuelPosition = vector.new(0,0,0)
 
 -- Indicates in which inner slot the turtle must seek fuel (1-16)
 fuelSlot = 1
@@ -88,7 +92,7 @@ fuelSlot = 1
 -- Up direction's value is 1 and Down direction's value is -1
 -- If not set, it will throw an error when using autoRefuel feature
 autoRefuelSuckDirection = -1
-autoRefuelDropDirection = 90
+autoRefuelDropDirection = 180
 
 -----------------------------------------------------------------------------
 -- AUTOREFILL MATERIALS FEATURES
@@ -112,8 +116,8 @@ autoDetectMaterials = true
 -- HINT : For avoidind turtle destroying your containers, set a startRange and a endRange with turtle's basic movement rule (if going down, movement is on x axis, then z axis and finally y axis - If going up, movement is on y axis, then x axis anf finally z axis)
 -- HINT : When refilling materials, turtle will always go first to startRange position, then to chest and leave by going to endRange position
 -- HINT : Better to be a line and you can put many chests to each position
-autoDetectStartPosition = vector.new(0,1,-1)		-- Set turtle position start for scanning container's area
-autoDetectEndPosition = vector.new(0,1,-1)			-- Set turtle position end for scanning container's area
+autoDetectStartPosition = vector.new(0,0,-2)		-- Set turtle position start for scanning container's area
+autoDetectEndPosition = vector.new(0,0,-2)			-- Set turtle position end for scanning container's area
 
 -----------------------------------------------------------------------------
 -- REDNET FEATURES
@@ -139,7 +143,7 @@ turtleStates = {
 
 -- Log level for verbose (cumulative)
 -- 0 : nothing, 1 : errors, 2 : warnings, 3 : informations, 4 : all sides messages
-logTermLevel = 2 		-- Log level for turtle terminal messages
+logTermLevel = 3 		-- Log level for turtle terminal messages
 logRednetLevel = 0		-- Log level for rednet broadcast message
 
 -- Statistics
@@ -214,7 +218,11 @@ local function lba_initialize()
 	if autoRefuelEnabled then
 		lba_log("Refuel : Auto",3)
 		lba_log("Checking distance to Fuel supply",4)
-		if not(checkIfRefuelNeeded()) then lba_log("Enough fuel to start work",3) end			
+		if not(checkIfRefuelNeeded()) then
+			lba_log("Enough fuel to start work",3)
+		else
+			waitForRefuel()
+		end			
 	else
 		lba_log("Refuel : Manual. Don't forget me !",3)
 	end
@@ -393,15 +401,15 @@ function forward(n)
 --			false	turtle didn't move all the way
 	n = n or 1
 	
-	if (turtleStates.isGoingForFuel == false) and autoRefuelEnabled then
-		checkIfRefuelNeeded()
-	end
-	
-	if turtle.getFuelLevel() == 0 then
-		waitForRefuel()
-	end
-	
 	for i=1,n do
+		if (turtleStates.isGoingForFuel == false) and autoRefuelEnabled then
+			checkIfRefuelNeeded()
+		end
+		
+		if turtle.getFuelLevel() == 0 then
+			waitForRefuel()
+		end
+	
 		local xi, zi = 0
 		local moved = false
 		local tries = 1
@@ -455,15 +463,15 @@ function up(n)
 --			false	Turtle didn't move
 	n = n or 1
 	
-	if (turtleStates.isGoingForFuel == false) and autoRefuelEnabled then
-		checkIfRefuelNeeded()
-	end
-	
-	if turtle.getFuelLevel() == 0 then
-		waitForRefuel()
-	end
-	
 	for i=1,n do
+		if (turtleStates.isGoingForFuel == false) and autoRefuelEnabled then
+			checkIfRefuelNeeded()
+		end
+		
+		if turtle.getFuelLevel() == 0 then
+			waitForRefuel()
+		end
+		
 		local moved = false
 		local tries = 1
 		while (not moved) and (tries <= maxTries) do
@@ -502,15 +510,15 @@ function down(n)
 --			false	Turtle didn't move
 	n = n or 1
 	
-	if (turtleStates.isGoingForFuel == false) and autoRefuelEnabled then
-		checkIfRefuelNeeded()
-	end
-	
-	if turtle.getFuelLevel() == 0 then
-		waitForRefuel()
-	end
-	
 	for i=1,n do
+		if (turtleStates.isGoingForFuel == false) and autoRefuelEnabled then
+			checkIfRefuelNeeded()
+		end
+		
+		if turtle.getFuelLevel() == 0 then
+			waitForRefuel()
+		end
+		
 		local moved = false
 		local tries = 1
 		while (not moved) and (tries <= maxTries) do
@@ -628,6 +636,7 @@ function checkIfRefuelNeeded()
 --@return	Boolean		True if fuel needed, false if not
 	local distance = distanceToFuel()
 	
+	--print(distance," : ",turtle.getFuelLevel());
 	if distance >= turtle.getFuelLevel() then
 		waitForRefuel()	
 		return true
@@ -649,13 +658,15 @@ function goRefuel()
 	local ys = turtlePosition.y
 	local zs = turtlePosition.z
 	
+	--Fuel Slot cleaning in case of previous mining/digging
+	turtle.select(fuelSlot)
+	if turtle.getItemCount(fuelSlot) > 0 then turtle.dropDown() end		
+	
 	goTo(fuelPosition.x, fuelPosition.y, fuelPosition.z)
 	
 	-- Refueling
 	while(turtle.getFuelLevel() < turtle.getFuelLimit()) do
 		-- Orients turtle to fuel storage
-		turtle.select(fuelSlot)
-		
 		if math.abs(autoRefuelSuckDirection) > 1 then
 			faceTo(autoRefuelSuckDirection)
 			turtle.suck(1)
@@ -771,7 +782,7 @@ function doScanContainer(direction)
 			materialLocation[m].y = turtlePosition.y
 			materialLocation[m].z = turtlePosition.z
 			materialLocation[m].d = direction
-			if(materialLocation[m].locked) then -- Remplissage des solts réservés à ce matériel
+			if(materialLocation[m].locked) then -- Remplissage des solts rÃ©servÃ©s Ã  ce matÃ©riel
 				lba_log("Found locked slot(s) for "..m, 4)
 				for i, slot in ipairs(materialLocation[m].locked) do fillSlot(m, slot) end					
 				turtle.select(fuelSlot)
