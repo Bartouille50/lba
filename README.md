@@ -20,7 +20,7 @@ Lba extends native computercraft turtles's controls in many ways :
 - Build API with light error control, dot, 3D line and X,Z rectangle (hollow and filled) features
 
 ## How to Install to your turtle with terminal
-- Version 1.0b : `pastebin get UY94nJwL lba`
+- Version 1.0b : `pastebin get MR3h6ccV lba`
 
 ## How to use it
 For using lba, simply provide `your_build()` function with your building script. Lba is designed for building layers from bottom to top (turtle always place blocks from below). As an example, the script is provided with a xmobtower script
