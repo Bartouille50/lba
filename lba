@@ -640,7 +640,7 @@ function checkIfRefuelNeeded()
 	if distance >= turtle.getFuelLevel() then
 		waitForRefuel()	
 		return true
-	elseif (distance >= (turtle.getFuelLevel() - 1)) and autoRefuelEnabled then
+	elseif distance == turtle.getFuelLevel() and autoRefuelEnabled then
 		goRefuel()
 		return false
 	else
