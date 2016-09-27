@@ -31,10 +31,11 @@ Code is heavily commented so please refer to it for further explanations about h
 
 ##Todo
 - UI for entering fuel and materials position at launch rather than hard coding these
-- Fixed screen updating with current informations
+- Ad d GUI and mouse support for advanced turtles
 - Full Bug testing
 - Code optimization
-- Separate and complete an event manager
+- Import build script from another function
+- Separate and complete the event manager
 - Rednet logging
 - add support to put some blocks from front (torches, ladders...)
 - Add some build functions : 2D shapes (circle, triangles), 3D shapes (sphere, pyramid)
